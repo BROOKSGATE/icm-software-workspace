@@ -3,3 +3,7 @@
 .env.*
 !.env.example
 .icm/
+.venv/
+__pycache__/
+app/db.sqlite3
+app/media/

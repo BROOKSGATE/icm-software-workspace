@@ -1,0 +1,83 @@
+{% extends "market/base.html" %}
+{% block content %}
+<h1>{{ req.item }}</h1>
+<div class="card">
+  <p>Quantity {{ req.quantity }} · budget {{ req.budget_cad }} CAD · deliver to {{ req.delivery_city }} by {{ req.deadline }}</p>
+  <p>Status: <strong>{{ req.get_status_display }}</strong></p>
+  {% if role == "agent" and chosen %}
+    <p>Buyer: {{ req.buyer.username }} · {{ req.buyer.email }}{% if req.buyer.profile.phone %} · {{ req.buyer.profile.phone }}{% endif %}</p>
+  {% endif %}
+</div>
+
+{% if role == "buyer" and not chosen %}
+  <h2>Quotes</h2>
+  {% for q, cad in quotes %}
+    <div class="card">
+      <p><strong>{% if cad %}{{ cad }} CAD{% else %}₦{{ q.total_ngn }}{% endif %}</strong> · {{ q.timeline }}</p>
+      <p class="muted">Item ₦{{ q.item_price_ngn }} + fee ₦{{ q.sourcing_fee_ngn }} + shipping ₦{{ q.shipping_ngn }}. The CAD price is fixed when you accept.</p>
+      {% if q.note %}<p>{{ q.note }}</p>{% endif %}
+      {% if req.status != "cancelled" %}
+      <form method="post" action="{% url 'quote_accept' req.pk q.pk %}">{% csrf_token %}<button type="submit">Accept this quote</button></form>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="muted">No quotes yet.</p>
+  {% endfor %}
+{% endif %}
+
+{% if role == "agent" and not chosen %}
+  {% if my_quote %}
+    <p class="card">You quoted ₦{{ my_quote.total_ngn }}. Waiting for the buyer.</p>
+  {% else %}
+    <h2>Send a quote</h2>
+    <form method="post" action="{% url 'quote_create' req.pk %}" class="card">{% csrf_token %}{{ quote_form.as_p }}<button type="submit">Send quote</button></form>
+  {% endif %}
+{% endif %}
+
+{% if chosen %}
+  <div class="card">
+    <h2>Accepted quote</h2>
+    <p>₦{{ chosen.total_ngn }} = <strong>{{ chosen.total_cad }} CAD</strong> at ₦{{ chosen.rate_ngn_per_cad }} per CAD (fixed) · agent {{ chosen.agent.username }}</p>
+    {% if role == "buyer" and req.status == "accepted" %}
+      <form method="post" action="{% url 'pay' req.pk %}">{% csrf_token %}<button type="submit">Pay {{ chosen.total_cad }} CAD into escrow</button></form>
+    {% endif %}
+    {% if req.paid_cad %}<p>Paid {{ req.paid_cad }} CAD · released {{ req.released_cad }} CAD{% if req.refunded_cad %} · refunded {{ req.refunded_cad }} CAD{% endif %}</p>{% endif %}
+  </div>
+
+  {% if req.paid_cad %}
+  <div class="card">
+    <h2>Release steps</h2>
+    <p class="muted">40% when bought, 30% when shipped, 30% when received.</p>
+    <ul class="plain">
+    {% for s in steps %}
+      <li>{{ s.get_step_display }}: <a href="{% url 'proof_file' req.pk s.step %}">proof</a>{% if s.note %} ({{ s.note }}){% endif %} ·
+        {% if s.confirmed_at %}released {{ s.amount_cad }} CAD{% else %}waiting for buyer{% endif %}</li>
+    {% endfor %}
+    </ul>
+    {% if role == "buyer" and pending_step %}
+      <form method="post" action="{% url 'step_confirm' req.pk pending_step.step %}">{% csrf_token %}<button type="submit">Confirm '{{ pending_step.step }}' and release payment</button></form>
+    {% endif %}
+    {% if role == "agent" and next_step and not pending_step and req.status != "cancelled" %}
+      <form method="post" action="{% url 'proof_upload' req.pk %}" enctype="multipart/form-data">{% csrf_token %}
+        <p>Upload proof that the item is <strong>{{ next_step }}</strong>.</p>{{ proof_form.as_p }}<button type="submit">Send proof</button></form>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <h2>Chat</h2>
+    <div class="chat" id="chat" aria-live="polite">{% include "market/_chat.html" %}</div>
+    <form method="post" action="{% url 'chat' req.pk %}">{% csrf_token %}{{ message_form.as_p }}<button type="submit">Send</button></form>
+  </div>
+  <script>
+    setInterval(function () {
+      fetch("{% url 'chat' req.pk %}").then(function (r) { return r.text(); })
+        .then(function (html) { document.getElementById("chat").innerHTML = html; });
+    }, 5000);
+  </script>
+{% endif %}
+
+{% if role == "buyer" and req.status != "received" and req.status != "cancelled" %}
+  <form method="post" action="{% url 'cancel' req.pk %}">{% csrf_token %}<button class="secondary" type="submit">Cancel request</button></form>
+{% endif %}
+{% endblock %}

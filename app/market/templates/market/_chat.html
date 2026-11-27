@@ -1,0 +1,5 @@
+{% for m in req.messages.all %}
+  <p><strong>{% if m.sender_id == user.id %}You{% else %}{{ m.sender.username }}{% endif %}:</strong> {{ m.body }} <span class="muted">{{ m.created_at|time:"H:i" }}</span></p>
+{% empty %}
+  <p class="muted">No messages yet.</p>
+{% endfor %}

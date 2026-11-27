@@ -55,8 +55,10 @@ Accepted in chat 2026-11-26.
 - **Payments:** Stripe test mode with separate charges and transfers. The
   buyer pays the accepted total in CAD through Stripe Checkout to SourceLink's
   Stripe balance; that held balance is the escrow. Each confirmed step
-  transfers its share to the agent's Stripe connected account. A step is
-  recorded before its transfer is sent, so it can never be paid twice.
+  transfers its share to the agent's Stripe connected account. Each step is
+  recorded in the same locked database transaction as its transfer, and the
+  transfer carries a per-step idempotency key, so a step can never be paid
+  twice.
 - **Exchange rate:** ExchangeRate-API's free open endpoint (no key, updated
   daily, attribution required) gives the CAD ↔ NGN rate. The rate is fixed on
   the quote when the buyer accepts it. Stripe's FX Quotes API was not chosen

@@ -1,0 +1,12 @@
+{% extends "market/base.html" %}
+{% block content %}
+<h1>Your requests</h1>
+<a class="button" href="{% url 'request_new' %}">Post a sourcing request</a>
+<ul class="plain">
+{% for req in requests %}
+  <li class="card"><a href="{% url 'request_detail' req.pk %}">{{ req.item }}</a> · {{ req.get_status_display }}</li>
+{% empty %}
+  <li class="muted">No requests yet.</li>
+{% endfor %}
+</ul>
+{% endblock %}
