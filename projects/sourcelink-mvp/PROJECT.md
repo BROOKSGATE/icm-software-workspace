@@ -104,4 +104,6 @@ None.
 
 ## Links
 
-None yet.
+- Setup: https://github.com/BROOKSGATE/icm-software-workspace/pull/1
+- Brief: https://github.com/BROOKSGATE/icm-software-workspace/pull/2
+- Build: https://github.com/BROOKSGATE/icm-software-workspace/pull/3 (candidate `1b3afb6`)
