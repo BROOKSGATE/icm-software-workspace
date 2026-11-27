@@ -1,4 +1,23 @@
-# ICM Software Workspace Template
+# SourceLink workspace
+
+The ICM workspace for **SourceLink**, a marketplace that connects buyers with
+local sourcing agents in other countries, starting with the Nigeria ↔ Canada
+route. It was created from the ICM Software Workspace Template.
+
+## This instance
+
+- **Decision owner:** Alexander King owns all material product, technical,
+  acceptance, and release decisions.
+- **Size:** team. All seven stages and the team kit are kept.
+- **Code audience and quality bar:** prototype. Alexander reads, maintains, and
+  presents the code. It must work end to end and be easy to follow; production
+  hardening is a later, explicit decision. A Project restates its bar under
+  Technical choices when it differs.
+- **Application code:** none yet; see [`app/README.md`](app/README.md).
+- **Shared constraints:** [product principles](_shared/principles/product-principles.md)
+  and [UI rules](_shared/ux/ui-ux-rules.md).
+
+## About the template
 
 A reusable workspace for taking software work from intent through decisions,
 implementation, review, and proof. It uses scoped context, useful initiative,

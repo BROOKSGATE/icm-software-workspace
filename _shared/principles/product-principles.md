@@ -6,8 +6,14 @@ its product intent, scope, and behavior.
 
 ## Principles
 
-No cross-Project product principles have been earned yet. This is an explicit
-current state, not a prompt to invent defaults.
+Accepted at setup (2026-11-26) for all SourceLink work:
+
+- **Privacy:** buyers' and agents' personal details (names, addresses, phone
+  numbers, IDs) are shown only to people who need them for an active order.
+  They are never logged, committed, or copied from real people into test data.
+- **Payments through a provider:** escrow, release, and payouts go through an
+  established payment provider. SourceLink never stores card or bank account
+  numbers.
 
 Add a principle here through the shared learning procedure only when accepted evidence shows that it
 should constrain more than one Project.

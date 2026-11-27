@@ -1,7 +1,8 @@
 # Application code
 
-This path reserves the application boundary in an unconfigured factory. The
-application stack and final source layout have not been selected.
+This path reserves the SourceLink application boundary. The stack and source
+layout are deferred. Trigger: the first feature that needs application code
+chooses them in Design. Owner: Alexander.
 
 During setup for an existing repository, preserve its verified source layout
 and update the root route to that canonical location. For a new repository, let

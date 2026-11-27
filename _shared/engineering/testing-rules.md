@@ -168,7 +168,8 @@ as dev, preview, and staging do not prove equivalent infrastructure.
 
 ## Focused repository commands
 
-The application has no selected stack or proof commands in the source template.
+SourceLink has no stack or proof commands yet. Trigger: the first feature that
+needs application code; Design selects them and records them here.
 Before its first implementation needs executable proof, define and verify the
 focused and full commands in its native executable configuration. Record the
 command names and applicability here; do not invent an application gate during setup.
