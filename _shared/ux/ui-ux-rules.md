@@ -43,6 +43,8 @@ Do not enumerate states that the product and its real boundaries cannot reach.
   applicable keyboard, focus, contrast, motion, and assistive-technology needs?
 - Do validation and feedback help the user recover without hiding state or
   blame?
+- SourceLink (accepted at setup): does the flow work well on a phone-sized
+  screen? Accessibility applies to every interface change.
 - Does the design avoid coercion, deceptive defaults, artificial urgency, and
   other dark patterns?
 

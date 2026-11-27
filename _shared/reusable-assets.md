@@ -7,10 +7,8 @@ are routed by [`CONTEXT.md`](CONTEXT.md); blank artifacts live under
 
 ## Available now
 
-No external data source, prior product artifact, design reference, provider
-environment, or other external reusable input is registered in the template.
-Add or explicitly decline external inputs during
-[`../setup/questionnaire.md`](../setup/questionnaire.md).
+None. No external inputs were registered at setup (2026-11-26). Add one when a
+feature needs it, under the admission rule below.
 
 ## Admission rule
 

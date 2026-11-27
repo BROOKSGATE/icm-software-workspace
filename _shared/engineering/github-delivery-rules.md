@@ -18,7 +18,8 @@ release, use the team kit's multi-PR rules (`extras/team-delivery/multi-pr-deliv
 
 - Inspect worktree, branch, staged changes, and the complete comparison diff.
 - Preserve unrelated changes; never commit secrets or unapproved personal data.
-- Use the instance's configured branch convention; this template imposes none.
+- Branch convention: one feature branch per change, off `main`, with a PR back
+  to `main`.
 - Derive the destination branch from the task and verified repository policy.
 - Verify exact head and base before a push or PR mutation.
 - Do not force-push, rewrite published shared history, or delete branches or
@@ -63,7 +64,8 @@ procedure even after merge or successful non-production proof.
 
 ## Merge methods preserve evidence and history
 
-Choose from the repository's actual policy before merge. Squash is suitable for
+This instance squash-merges an ordinary PR only after Alexander's explicit OK
+on that PR. Choose from the repository's actual policy before merge. Squash is suitable for
 one ordinary reviewable change. When acceptance or gate evidence needs the
 validated head to remain reachable, use a method that preserves that identity.
 For multi-PR delivery, define child-to-integration and integration-to-trunk

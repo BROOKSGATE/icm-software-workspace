@@ -1,5 +1,8 @@
 # ICM software workspace
 
+This repository builds SourceLink. Its identity, decision owner, and quality
+bar are in `README.md` under "This instance".
+
 Current human instructions and accepted decisions take precedence.
 
 ## Start here

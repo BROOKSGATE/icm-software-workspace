@@ -7,5 +7,6 @@
   "candidateGate": {
     "enabled": false,
     "phases": []
-  }
+  },
+  "size": "team"
 }

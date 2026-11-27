@@ -1,6 +1,6 @@
 ---
 type: factory-setup
-status: incomplete
+status: complete
 ---
 
 # Setup questionnaire
