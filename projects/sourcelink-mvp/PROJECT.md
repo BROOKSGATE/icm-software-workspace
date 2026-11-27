@@ -17,7 +17,7 @@ Fixed constraints:
 - One route only: buyers in Canada, agents in Nigeria.
 - Mobile-friendly web app.
 - Prototype quality bar (see [README](../../README.md#this-instance)).
-- Escrow runs in Flutterwave's test mode only; no real money moves.
+- Escrow runs in Stripe's test mode only; no real money moves.
 - [Privacy and payment principles](../../_shared/principles/product-principles.md)
   and [UI rules](../../_shared/ux/ui-ux-rules.md) apply.
 
@@ -52,26 +52,28 @@ Accepted in chat 2026-11-26.
 - **Stack:** Python and Django, server-rendered mobile-friendly pages. Django
   admin is where Alexander invites agents. Chat is a page that checks for new
   messages every few seconds; no real-time server.
-- **Payments:** Flutterwave test mode. The buyer pays the accepted total
-  through Flutterwave Checkout into SourceLink's Flutterwave balance; that
-  held balance is the escrow. Each confirmed step sends its share to the
-  agent's NGN bank account with a Flutterwave transfer. A step is recorded
-  before its transfer is sent, so it can never be paid twice.
-- **Exchange rate:** Flutterwave's transfer-rates endpoint gives the live
-  CAD ↔ NGN estimate (it updates a few times a day). The rate is fixed on the
-  quote when the buyer accepts it.
-- **Secrets:** Flutterwave keys live in environment variables, never in the
+- **Payments:** Stripe test mode with separate charges and transfers. The
+  buyer pays the accepted total in CAD through Stripe Checkout to SourceLink's
+  Stripe balance; that held balance is the escrow. Each confirmed step
+  transfers its share to the agent's Stripe connected account. A step is
+  recorded before its transfer is sent, so it can never be paid twice.
+- **Exchange rate:** ExchangeRate-API's free open endpoint (no key, updated
+  daily, attribution required) gives the CAD ↔ NGN rate. The rate is fixed on
+  the quote when the buyer accepts it. Stripe's FX Quotes API was not chosen
+  because it is a preview service.
+- **Secrets:** Stripe keys live in environment variables, never in the
   repository.
 - **Delivery:** one PR for the first working version, split only if it grows
   too large to review.
 
-Uncertainty to resolve first in Build:
+Known limits:
 
-- Flutterwave's documentation does not confirm collecting CAD by card. Build
-  checks it in the sandbox first. If CAD is not supported, the buyer pays in
-  USD and sees the CAD estimate (a product change returned to Alexander).
-- Flutterwave's own escrow feature is documented only for an old API version,
-  so the design does not depend on it.
+- Stripe self-serve cross-border payouts from a Canadian platform reach only
+  the US, UK, EEA, Canada, and Switzerland; Nigeria needs Stripe sales or
+  another payout route. In this prototype each agent's test connected account
+  is a Canadian test account: the agent sees the NGN amount at the fixed rate,
+  and the test transfer moves the CAD equivalent. Real NGN payouts are a
+  production decision.
 - Holding buyers' money on the platform is fine in test mode, but real money
   needs a compliance review before any release.
 
