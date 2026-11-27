@@ -1,0 +1,19 @@
+{% extends "market/base.html" %}
+{% block content %}
+<h1>Open requests</h1>
+<ul class="plain">
+{% for req in open_requests %}
+  <li class="card"><a href="{% url 'request_detail' req.pk %}">{{ req.item }}</a> ×{{ req.quantity }} · to {{ req.delivery_city }} by {{ req.deadline }}</li>
+{% empty %}
+  <li class="muted">No open requests right now.</li>
+{% endfor %}
+</ul>
+<h2>Your quotes</h2>
+<ul class="plain">
+{% for q in my_quotes %}
+  <li class="card"><a href="{% url 'request_detail' q.request.pk %}">{{ q.request.item }}</a> · ₦{{ q.total_ngn }} · {{ q.get_status_display }}</li>
+{% empty %}
+  <li class="muted">You have not sent any quotes.</li>
+{% endfor %}
+</ul>
+{% endblock %}

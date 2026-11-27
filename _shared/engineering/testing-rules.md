@@ -168,8 +168,14 @@ as dev, preview, and staging do not prove equivalent infrastructure.
 
 ## Focused repository commands
 
-SourceLink has no stack or proof commands yet. Trigger: the first feature that
-needs application code; Design selects them and records them here.
+SourceLink (Django, in `app/`), run from `app/` with the project's virtual
+environment active:
+
+- `python manage.py test market` — focused proof for marketplace behavior;
+  Stripe and the exchange-rate site are mocked, so it runs offline.
+- `python manage.py check` — Django configuration check.
+- `python manage.py check_stripe` — one real Stripe test-mode call; run before
+  relying on payments and after changing keys.
 Before its first implementation needs executable proof, define and verify the
 focused and full commands in its native executable configuration. Record the
 command names and applicability here; do not invent an application gate during setup.
