@@ -17,7 +17,7 @@ Fixed constraints:
 - One route only: buyers in Canada, agents in Nigeria.
 - Mobile-friendly web app.
 - Prototype quality bar (see [README](../../README.md#this-instance)).
-- Escrow runs in the payment provider's test mode only; no real money moves.
+- Escrow runs in Flutterwave's test mode only; no real money moves.
 - [Privacy and payment principles](../../_shared/principles/product-principles.md)
   and [UI rules](../../_shared/ux/ui-ux-rules.md) apply.
 
@@ -34,8 +34,9 @@ Workflow:
    chat opens between the buyer and the chosen agent only.
 4. The buyer pays the accepted total into escrow through the provider's hosted
    checkout, using a test card.
-5. Escrow is released to the agent step by step as each step is confirmed:
-   item bought, item shipped, item received. Cancelling refunds the buyer
+5. Escrow is released to the agent step by step: 40% when the item is bought,
+   30% when shipped, 30% when received. For each step the agent uploads proof
+   (a photo or receipt) and the buyer confirms it. Cancelling refunds the buyer
    whatever has not been released.
 
 Request states: open → quoted → accepted → paid (held) → bought → shipped →
@@ -46,8 +47,33 @@ or logistics integration, ratings, real payments, open agent sign-up, and native
 
 ## Technical choices
 
-Not decided. Design selects the stack, payment provider, hosting, and proof
-commands.
+Accepted in chat 2026-11-26.
+
+- **Stack:** Python and Django, server-rendered mobile-friendly pages. Django
+  admin is where Alexander invites agents. Chat is a page that checks for new
+  messages every few seconds; no real-time server.
+- **Payments:** Flutterwave test mode. The buyer pays the accepted total
+  through Flutterwave Checkout into SourceLink's Flutterwave balance; that
+  held balance is the escrow. Each confirmed step sends its share to the
+  agent's NGN bank account with a Flutterwave transfer. A step is recorded
+  before its transfer is sent, so it can never be paid twice.
+- **Exchange rate:** Flutterwave's transfer-rates endpoint gives the live
+  CAD ↔ NGN estimate (it updates a few times a day). The rate is fixed on the
+  quote when the buyer accepts it.
+- **Secrets:** Flutterwave keys live in environment variables, never in the
+  repository.
+- **Delivery:** one PR for the first working version, split only if it grows
+  too large to review.
+
+Uncertainty to resolve first in Build:
+
+- Flutterwave's documentation does not confirm collecting CAD by card. Build
+  checks it in the sandbox first. If CAD is not supported, the buyer pays in
+  USD and sees the CAD estimate (a product change returned to Alexander).
+- Flutterwave's own escrow feature is documented only for an old API version,
+  so the design does not depend on it.
+- Holding buyers' money on the platform is fine in test mode, but real money
+  needs a compliance review before any release.
 
 ## Acceptance and proof
 
@@ -70,11 +96,7 @@ Design names the smallest set of tests that prove these.
 
 ## Open questions
 
-- **Release shares:** what share is released at each step (bought, shipped,
-  received), and who confirms each step: the agent with proof such as a photo
-  or receipt, or the buyer?
-- **Exchange rate:** where does the CAD ↔ NGN rate come from, and is it fixed
-  when the buyer accepts the quote?
+None.
 
 ## Links
 
